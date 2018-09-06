@@ -29,18 +29,20 @@ Processing steps:
 
 
 ## Usage
-The streamlined processing is coded in script process_data.py and all the parameters need to be set in a JSON config file using the format of input as shown in config_default.json.
-To call this script, copy and past the file config_default.json to your working directory, and modify the input parameters to point to your data, you can also modify the processings and processing parameters. Then, run: 
+The streamlined processing is scripted in `process_data.py` and all the parameters need to be set in a JSON config file using the format of input as shown in `config_default.json`.
+To call this script, copy and past the file `config_default.json` to your working directory, and modify the input parameters to point to your data, you can also modify the processings applied and processing parameters. Then, run: 
+```
 python /absolute/path/to/the/scripts/process_data.py --config my_config_file.json
+```
 
-Note that to work, all the scripts need to be in the same directory as the main script (process_data.py)
+Note that to work, all the scripts need to be in the same directory as the main script (`process_data.py`)
 At the end of the script, a new version of the config file is saved in the output folder, to have access to the file names of the images computed during the processing as well as other data (for ex. ETCO2) and easily store that information.
 
 ## Installation of the necessary packages  
 the requirements to run these scripts are FSL (fsl.fmrib.ox.ac.uk/fsl/fslwiki/) and some python packages. To install them, run: 
-
+```
 cd /absolute/path/to/the/scripts/install
 chmod 775 install.sh
 ./install.sh
-
+```
 
