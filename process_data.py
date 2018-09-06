@@ -204,10 +204,14 @@ class Pipeline:
 					self.config.config_params['challenge'][k] = None
 			#
 			# add verbose with v=x
-			end_tidal_pre, end_tidal_post = get_end_tidal_pre_post(self.config.path_data['breathing'], self.config.path_data['output_folder'], start_pre=self.config.config_params['challenge']['start_pre'], end_pre=self.config.config_params['challenge']['end_pre'], start_post=self.config.config_params['challenge']['start_post'], end_post=self.config.config_params['challenge']['end_post'])
+			end_tidal_pre, end_tidal_post, start_pre, end_pre, start_post, end_post = get_end_tidal_pre_post(self.config.path_data['breathing'], self.config.path_data['output_folder'], start_pre=self.config.config_params['challenge']['start_pre'], end_pre=self.config.config_params['challenge']['end_pre'], start_post=self.config.config_params['challenge']['start_post'], end_post=self.config.config_params['challenge']['end_post'])
 			# save figures only if verbose 2 ?
 			self.config.config_params['challenge']['end_tidal_pre'] = np.nanmean(end_tidal_pre)
 			self.config.config_params['challenge']['end_tidal_post'] = np.nanmean(end_tidal_post)
+			self.config.config_params['challenge']['start_pre'] = start_pre
+			self.config.config_params['challenge']['end_pre'] = end_pre
+			self.config.config_params['challenge']['start_post'] = start_post
+			self.config.config_params['challenge']['end_post'] = end_post
 		#
 		## GET CVR
 		if self.config.processing['CVR'] and self.config.path_data['cvr'] is None:

@@ -216,7 +216,7 @@ def get_end_tidal_pre_post(fname_smartlab, ofolder, start_pre=None, end_pre=None
 		print 'mean ETCO2 - basal', np.mean(end_tidal_pre)
 		print 'mean ETCO2 - hyper', np.mean(end_tidal_post) 
 	#
-	return end_tidal_pre, end_tidal_post
+	return end_tidal_pre, end_tidal_post, start_pre, end_pre, start_post, end_post
 
 if __name__ == "__main__":
 	parser = get_parser()
