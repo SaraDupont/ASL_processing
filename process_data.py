@@ -66,13 +66,13 @@ class Config:
 		#
 		for k, fname in self.path_data.items():
 			if k != 'path' and k != 'output_folder' and fname != '':
-				if not os.path.isfile(fname):
+				if not os.path.isabs(fname):
 					fname = os.path.join(path_wd, fname)
 				if not os.path.isfile(fname):
 					if os.path.isdir(fname) and '.dcm' in os.listdir(fname)[1]:
 						fname = self.convert_dicom_to_nifti(fname, k)
 					else:
-						warnings.warn('WARNING: input file does not exist: %s\nThis might cause an error later in the processing.' %fname)
+						warnings.warn('\n-------------------------\nWARNING: input file does not exist: %s\nThis might cause an error later in the processing.' %fname)
 						fname = ""
 				#
 				self.path_data[k] = fname
@@ -86,10 +86,24 @@ class Config:
 			#
 			path_dcm = replace_char(path_dcm)
 			#
-			cmd = "dcm2niix -o "+self.path_data['output_folder']+" -z y -b n -f "+file_out+" "+path_dcm+"/ "
+			status_dcm, o = commands.getstatusoutput('command dcm2niix')
 			#
-			print 'Converting dicom to nifti: ', cmd
-			status, output = commands.getstatusoutput(cmd) 
+			if status_dcm == 0:
+				cmd_dcm = "dcm2niix -o "+self.path_data['output_folder']+" -z y -b n -f "+file_out+" "+path_dcm+"/ "
+				status, output = commands.getstatusoutput(cmd_dcm)
+			else:
+				ofolder_dcm_tmp = os.path.join(self.path_data['output_folder'], file_out+'_tmp')
+				#
+				cmd_dcm = "dcm2nii -o "+ofolder_dcm_tmp+" -g Y "+path_dcm+"/ "
+				#
+				if not os.path.isdir(ofolder_dcm_tmp):
+					os.mkdir(ofolder_dcm_tmp)
+				#
+				status, output = commands.getstatusoutput(cmd_dcm)
+				#
+				shutil.move(os.path.join(ofolder_dcm_tmp, os.listdir(ofolder_dcm_tmp)[0]), fname_out)
+				shutil.rmtree(ofolder_dcm_tmp)
+			#
 			#
 			if status != 0:
 				print ' --> OUTPUT DCM2NIIX: ', output
