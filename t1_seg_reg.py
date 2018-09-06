@@ -273,7 +273,7 @@ class Registration:
 			fname_mat_t1_to_metric = fname_mat_t1_to_metric_nl if fname_mat_t1_to_metric_nl is not None else fname_mat_t1_to_metric_lin
 		#
 		for metric, fname_metric in zip(["CBF_pre", "CBF_post", "CVR"], [self.fname_cbf_pre, self.fname_cbf_post, self.fname_cvr]):
-			if metric in self.dict_param['metric']:
+			if metric in self.dict_param['metric'] and fname_metric is not None:
 				# extract values from atlas ROIs: 
 				fname_excel_out = 'atlas_values_'+metric+'.xls'
 				# excel writer to output the pandas
