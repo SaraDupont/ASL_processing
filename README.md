@@ -1,5 +1,5 @@
 # ASL processing
-Processing scripts for ASL data to extract cerebral blood flow (CBF) and cerebrovascular reactivity (CVR) maps
+Processing scripts for ASL data to extract cerebral blood flow (CBF) and cerebrovascular reactivity (CVR) maps.
 
 Scripts were developed by Sara Dupont (sara.m.dupont@gmail.com), a research associate with UCSF working at ZSFG; as an employee of UCSF, her work is intellectual property of UCSF.
 
@@ -34,7 +34,10 @@ Processing steps:
 
 ## Usage
 The streamlined processing is scripted in `process_data.py` and all the parameters need to be set in a JSON config file using the format of input as shown in `config_default.json`.
-To call this script, copy and past the file `config_default.json` to your working directory, and modify the input parameters to point to your data, you can also modify the processings applied and processing parameters. Then, run: 
+
+To call this script, copy and past the file `config_default.json` to your working directory, and **modify the input parameters to point to your data**. You can also **choose which processing to apply** and change the **processing parameters** and **acquisition parameters**. 
+
+Then, run: 
 ```
 python /absolute/path/to/the/scripts/process_data.py --config my_config_file.json
 ```
