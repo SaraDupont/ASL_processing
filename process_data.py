@@ -58,10 +58,11 @@ class Config:
 		path_wd = self.path_data['path']
 		path_ofolder = self.path_data['output_folder']
 		#
-		if not os.path.isdir(path_wd):
+		if not os.path.isdir(path_wd) and path_wd != '':
 			raise IOError('input folder does not exist: %s' %path_wd)
 		#
 		path_ofolder = create_folder(path_ofolder)
+		self.path_data['output_folder'] = path_ofolder
 		#
 		for k, fname in self.path_data.items():
 			if k != 'path' and k != 'output_folder' and fname != '':
@@ -82,14 +83,7 @@ class Config:
 		fname_out = os.path.join(self.path_data['output_folder'], file_out+default_ext)
 		if not os.path.isfile(fname_out):
 			#
-			for c in "+'( )%":
-				path_dcm = path_dcm.replace(c, "\\"+c)
-			#
-			# path_dcm = path_dcm.replace("=", "\=")
-			# path_dcm = path_dcm.replace("'", "\\'")
-			# path_dcm = path_dcm.replace(" ", "\ ")
-			# path_dcm = path_dcm.replace("(", "\(")
-			# path_dcm = path_dcm.replace(")", "\)")
+			path_dcm = replace_char(path_dcm)
 			#
 			cmd = "dcm2niix -o "+self.path_data['output_folder']+" -z y -b n -f "+file_out+" "+path_dcm+"/ "
 			#

@@ -11,6 +11,8 @@ def create_folder(path_folder):
             os.mkdir(path_folder)
         except:
             pass
+    path_folder = os.path.abspath(path_folder)
+    #
     return path_folder
 
 def input_file(path_file):
@@ -120,6 +122,12 @@ def make_tmp_dir(path, tmp_dir):
         print "Folder "+tmp_dir+" already exists in "+path
     # 
     return path_tmp_dir
+
+def replace_char(path, char_list="+'( )%"):
+    for c in char_list+'"':
+        path = path.replace(c, "\\"+c)
+    #
+    return path
 
 
 if __name__ == "__main__":
