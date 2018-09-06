@@ -50,7 +50,7 @@ def get_aveCBF(tCBF_PC, fname_t1_mask=None, fname_t1=None, rho=1.06, ofolder='./
 	#
 	# get brain mask from T1 file if not provided
 	if fname_t1_mask is None:
-		assert os.path.isfile(fname_t1), 'ERROR: cannot find T1 file: %s' %fname_t1
+		assert os.path.isfile(str(fname_t1)), 'ERROR: cannot find T1 file: %s' %fname_t1
 		# segment brain on t1 image 
 		fname_t1_mask = os.path.join(ofolder, 't1_brain.nii.gz')
 		cmd_bet = 'bet '+fname_t1+' '+fname_t1_mask+' -m -n '

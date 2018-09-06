@@ -1,4 +1,4 @@
-import argparse, json, os, commands
+import argparse, json, os, commands, warnings
 from json_minify import json_minify
 
 from utils import * 
@@ -66,13 +66,14 @@ class Config:
 		#
 		for k, fname in self.path_data.items():
 			if k != 'path' and k != 'output_folder' and fname != '':
-				if not os.path.isabs(fname):
+				if not os.path.isfile(fname):
 					fname = os.path.join(path_wd, fname)
 				if not os.path.isfile(fname):
 					if os.path.isdir(fname) and '.dcm' in os.listdir(fname)[1]:
 						fname = self.convert_dicom_to_nifti(fname, k)
 					else:
-						raise IOError('input file does not exist: %s' %fname)
+						warnings.warn('WARNING: input file does not exist: %s\nThis might cause an error later in the processing.' %fname)
+						fname = ""
 				#
 				self.path_data[k] = fname
 			if fname == '':
@@ -159,7 +160,7 @@ class Pipeline:
 		## PROCESS ASL PRE TO GET CBF
 		if self.config.processing['CBF_pre'] and self.config.path_data['cbf_pre'] is None:
 			#
-			if int(self.config.config_params['labeling_efficiency']['tCBF_pre']) != 0:
+			if int(self.config.config_params['labeling_efficiency']['tCBF_pre']) != 0 and self.config.path_data['t1'] is not None:
 				## correct labeling efficiency 
 				alpha_pre = get_corrected_alpha(self.config.config_params['labeling_efficiency']['tCBF_pre'], self.config.config_params['asl'], self.config.path_data['asl_pre'], fname_asl_mask=self.config.path_data['asl_pre_brain_mask'], fname_t1_mask=self.config.path_data['t1_brain_mask'], fname_t1=self.config.path_data['t1'], ofolder=self.config.path_data['output_folder'], fname_alpha='alpha_pre.txt')
 				#
@@ -174,7 +175,7 @@ class Pipeline:
 		## PROCESS ASL PRE TO GET CBF
 		if self.config.processing['CBF_post'] and self.config.path_data['cbf_post'] is None:
 			# 
-			if int(self.config.config_params['labeling_efficiency']['tCBF_post']) != 0:
+			if int(self.config.config_params['labeling_efficiency']['tCBF_post']) != 0 and self.config.path_data['t1'] is not None:
 				## correct labeling efficiency 
 				alpha_post = get_corrected_alpha(self.config.config_params['labeling_efficiency']['tCBF_post'], self.config.config_params['asl'], self.config.path_data['asl_post'], fname_asl_mask=self.config.path_data['asl_post_brain_mask'], fname_t1_mask=self.config.path_data['t1_brain_mask'], fname_t1=self.config.path_data['t1'], ofolder=self.config.path_data['output_folder'], fname_alpha='alpha_post.txt')
 				self.config.config_params['asl']['alpha'] = alpha_post
