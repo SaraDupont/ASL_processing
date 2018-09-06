@@ -1,0 +1,82 @@
+{
+	// Define here which processing to perform: insert 1 to do the corresponding processing or 0 to skip it
+	"process":{
+		"Brain_seg_t1": 1,
+		"WMGM_seg_t1": 1,
+		"CBF_pre": 1,
+		"CBF_post": 1,
+		"Breathing": 1,
+		"CVR": 1,
+		"Get_values_roi": 1
+		},
+	// Specify here the path and file names of the data to process. 
+	"data":{
+		"path": "./data",
+		"output_folder": "./",
+		"t1": "t1.nii.gz", // OR folder_t1_dicoms 
+		"t1_brain_mask": "", //"t1_brain_mask.nii.gz", 
+		"t1_gm_mask": "", //"t1_brain_pve_1.nii.gz", 
+		"t1_wm_mask": "", //"t1_brain_pve_2.nii.gz", 
+		"asl_pre": "asl_pre.nii.gz", // OR folder_asl_pre_dicoms 
+		"asl_post": "asl_post.nii.gz", // OR folder_asl_post_dicoms 
+		"asl_pre_brain_mask": "", //"asl_pre_brain_mask.nii.gz", 
+		"asl_post_brain_mask": "", //"asl_post_brain_mask.nii.gz", 		
+		"cbf_pre": "", // "asl_pre_cbf.nii.gz", 
+		"cbf_post": "", // "asl_post_cbf.nii.gz", 
+		"breathing": "SmartLab.txt", 
+		"cvr": "" // "cvr.nii.gz"
+		},
+	// Processing-specific parameters:
+	// Specify the ASL processing parameters:
+	"asl":{
+		"type_asl": "pasl", // Type of ASL scan: Pulsed ASL (pasl) or pseudo-continuous ASL (ge-pcasl or pcasl)
+		"order": "tc", // Order of the tag and control frames in the ASL data, first control then tag (ct) or first tag then control (tc)
+		//
+		"moco": 1, // Perform motion correction (=register every frame on the first control frame) (input 0 or 1)
+		"smooth": 1.5, // Do gaussian smoothing on each frame of the ASL data. Specify here the value of the 3D kernel used for smoothing. Input 0 to skip this step.
+		"int-norm": 100.0, //Do intensity normalization on each frame of the ASL data based on intensity of the first control frame. Specify here the goal mean intensity value (intensity averaged within brain). Input 0 to skip this step.
+		//
+		"lambda": 0.9, // Blood brain partition coefficient (lambda value).
+		"t1-blood": 1.65, // T1 relaxation time of blood.
+		"alpha": 0.98, // Labelling efficiency. For PASL: 0.98, for pcASL: 0.85
+		"ti": 1.8, // Inversion time in sec (for PASL only).
+		"bolus-duration": 0.80, // Bolus duration in sec (for PASL only).
+		"tr": 4.6, // Repetition time in sec (for PASL only).
+		"pld": 2.0,  // Post labelling delay in sec (for pcASL only).
+		"tau": 1.8, // Label duration in sec (for pcASL only).
+		//
+		"bet_radius": 55 // Estimated radius of the brain in mm for BET initialization (see param -r in bet documentation)
+		},
+	// Start and end time of the ASL scans in seconds in the breathing data file from the Smartlab software 
+	"challenge":{
+		"type": "CO2", // Type of challenge for CVR acquisition: "CO2" or "Diamox"
+		// Following arguments are only for "CO2" challenge
+		"start_pre": 0, // Time of start of the ASL pre-challenge
+		"end_pre": 0,  // Time of end of the ASL pre-challenge
+		"start_post": 0,  // Time of end of the ASL pre-challenge
+		"end_post": 0,  // Time of end of the ASL pre-challenge
+		"end_tidal_pre": 0,
+		"end_tidal_post": 0
+	},
+	// Define here which ROI to extract information from, which data/metrics to extract from the ROIs and which measurements to get
+	"roi":{
+		"atlas": ["cortical", "subcortical", "WMGM"],
+		"metric": ["CBF_pre", "CBF_post", "CVR"],
+		"measures": ["mean", "median", "std", "min", "max"], // should be exact names of numpy functions 
+		// Registration: choose what type of registration to perform, Please keep at least one of the two options to 1: 
+		"registration":{
+			"linear": 1,
+			"non-linear": 1
+		}
+	},
+	// T1 segmentation:
+	"t1":{
+		"centered_fov": 0 //is the field of view of the T1 image centered on the brain (1) ? or does the image include the neck (0) ?
+	},
+	// Labeling efficiency correction:
+	"labeling_efficiency":{
+		"tCBF_pre": 0, // Value of the total CBF (in mL/min) estimated of PC image for the PRE-challenge scan
+		"tCBF_post": 0 // Value of the total CBF (in mL/min) estimated of PC image for the DURING-challenge scan
+	}
+
+}
